@@ -8,6 +8,12 @@ Providers supply advertisements, surface and embedded-document reads, command
 submission, asset resolution, and any product daemon lifecycle. EveElectron
 does not import provider state or plugin semantic implementations.
 
+`EveCultMeshProviderClient` takes an Odin-resolved peer target and advertisement
+record reference, then follows only provider-published references for surfaces,
+commands, receipts, and embedded documents. CultMesh and MessagePack are
+constructor dependencies supplied from the application's installed CultLib
+packages; the runtime owns protocol flow without pinning a sibling checkout.
+
 ```powershell
 npm install
 npm test
