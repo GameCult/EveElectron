@@ -147,7 +147,7 @@
         "path": "../EveElectron/artifacts/capture/aetheria-world/window.png",
         "providerId": "aetheria",
         "surfaceId": "aetheria.daemon.game",
-        "sourceSurfacePath": "../Eve/web/fixtures/aetheria-world-surface.json",
+        "sourceSurfacePath": "../Aetheria/conformance/eve/aetheria-world-surface.json",
         "requestPath": "../EveElectron/artifacts/capture/aetheria-world/runtime-witness.json"
       }
     ]
