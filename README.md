@@ -19,6 +19,12 @@ Electron hosts that use the standard Eve IPC channels can point their
 entry exposes only `window.eveProvider`; provider-specific APIs do not share the
 renderer boundary.
 
+`startEveElectronProviderHost` owns the main-process runtime lifecycle: secure
+window construction, generic provider client creation, Eve IPC registration,
+receipt reconciliation, provider readiness, renderer loading, and cleanup.
+Provider repos supply a resolved target, dependencies, renderer path, and any
+provider-owned daemon development or asset hooks.
+
 ```powershell
 npm install
 npm test

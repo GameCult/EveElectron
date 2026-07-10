@@ -19,6 +19,10 @@
       "types": "./src/eve-electron-renderer.d.mts",
       "import": "./src/eve-electron-renderer.mjs"
     },
+    "./live-provider-host": {
+      "types": "./src/live-provider-host.d.mts",
+      "import": "./src/live-provider-host.mjs"
+    },
     "./preload": "./src/eve-provider-preload.cjs",
     "./preload-entry": "./src/eve-provider-preload-entry.cjs"
   },

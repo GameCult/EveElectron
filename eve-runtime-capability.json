@@ -16,7 +16,8 @@
     "embeddedDocuments",
     "pluginProjection",
     "securePreloadBridge",
-    "windowLifecycle"
+    "windowLifecycle",
+    "liveProviderHost"
   ],
   "supportedPlugins": [
     {
@@ -47,9 +48,14 @@
         "src/eve-electron-shell.mjs",
         "src/window-host.mjs",
         "src/eve-provider-preload.cjs",
+        "src/eve-provider-preload-entry.cjs",
+        "src/eve-electron-renderer.mjs",
+        "src/live-provider-host.mjs",
         "test/shell.test.mjs",
         "test/window-host.test.mjs",
-        "test/preload.test.cjs"
+        "test/preload.test.cjs",
+        "test/renderer.test.mjs",
+        "test/live-provider-host.test.mjs"
       ]
     }
   ],
