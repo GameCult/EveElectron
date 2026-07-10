@@ -190,7 +190,7 @@ function normalizeTarget(value) {
   return { providerId: String(value.providerId || ""), advertisementRecordRef: String(value.advertisementRecordRef), peerId: String(value.peerId || "provider"), verseId: String(value.verseId || "provider"), role: String(value.role || "provider"), endpoints: Array.isArray(value.endpoints) ? value.endpoints.map(String) : [] };
 }
 
-function childRecordRef(parent, child) { return `${String(parent).replace(/\/$/u, "")}/${encodeURIComponent(child)}`; }
+function childRecordRef(parent, child) { return `${String(parent).replace(/[:/]$/u, "")}:${String(child)}`; }
 function field(value, name, slot) { return value && typeof value === "object" ? (value[name] ?? value[slot]) : undefined; }
 function stringField(value, name, slot) { const result = field(value, name, slot); return typeof result === "string" ? result : ""; }
 function numberField(value, name, slot) { const result = field(value, name, slot); return typeof result === "number" && Number.isFinite(result) ? result : 0; }

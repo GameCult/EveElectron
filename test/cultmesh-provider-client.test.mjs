@@ -14,7 +14,7 @@ const surface = ["surface-state", "gamecult.eve.surface.v1", "test-provider", "d
 
 function harness() {
   const sent = [];
-  const records = new Map([["records/provider", advertisement], ["records/world", surface], ["records/receipts/cmd-1", { state: "accepted" }]]);
+  const records = new Map([["records/provider", advertisement], ["records/world", surface], ["records/receipts:cmd-1", { state: "accepted" }]]);
   const peer = { send: message => sent.push(message), close() {}, on() {} };
   const mesh = {
     createPeerCatalog: () => ({ upsert() {} }), createAuthorityLeaseCatalog: () => ({ upsert() {} }),
@@ -42,9 +42,9 @@ test("follows provider-advertised record references", async () => {
 test("submits at the advertised command boundary and reads the advertised receipt", async () => {
   const { client, sent } = harness();
   const submission = await client.submitCommand({ surfaceId: "world", command: "move", commandId: "cmd-1", payload: { x: 1 } });
-  assert.equal(sent[0].document.recordKey, "records/commands/cmd-1");
+  assert.equal(sent[0].document.recordKey, "records/commands:cmd-1");
   assert.equal(sent[0].document.sourceRole, "eve-runtime");
-  assert.equal(submission.receiptRecordRef, "records/receipts/cmd-1");
+  assert.equal(submission.receiptRecordRef, "records/receipts:cmd-1");
   assert.deepEqual(await client.receipt(submission), { state: "accepted" });
 });
 
