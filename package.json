@@ -11,6 +11,10 @@
       "types": "./src/index.d.ts",
       "import": "./src/index.mjs"
     },
+    "./provider-client": {
+      "types": "./src/cultmesh-provider-client.d.ts",
+      "import": "./src/cultmesh-provider-client.mjs"
+    },
     "./preload": "./src/eve-provider-preload.cjs"
   },
   "files": ["src", "capture", "scripts", "eve-runtime-capability.json", "README.md", "LICENSE"],

@@ -1,6 +1,6 @@
 const providerSchema = "gamecult.eve.provider_advertisement.v1";
-const commandSchema = "gamecult.eve.command.v1";
-const connectionId = 0x45564545;
+const commandSchema = "gamecult.eve.command_invocation.v1";
+const connectionId = 0x43554c54;
 
 export class EveCultMeshProviderClient {
   #peer = null;
@@ -59,7 +59,17 @@ export class EveCultMeshProviderClient {
     if (!command) throw new Error("Command is required.");
     const issuedAtUtc = request.issuedAtUtc || new Date().toISOString();
     const commandId = request.commandId || `${this.runtimeId}:${Date.now().toString(36)}:${Math.random().toString(36).slice(2)}`;
-    const payload = [commandSchema, commandId, advertisement.providerId, surface.surfaceId, command, issuedAtUtc, request.clientId || this.runtimeId, objectValue(request.payload)];
+    const payload = [
+      commandSchema,
+      advertisement.providerId,
+      surface.surfaceId,
+      [command, "", "Network", interaction.commandBoundary, commandId],
+      stringRecord(request.payload),
+      [new Date(issuedAtUtc), 0],
+      request.clientId || this.runtimeId,
+      interaction.commandBoundary,
+      interaction.receiptSchema,
+    ];
     const peer = await this.#getPeer();
     peer.send({
       schemaVersion: "cultnet.document_put_raw.v0",
@@ -80,6 +90,7 @@ export class EveCultMeshProviderClient {
       providerId: advertisement.providerId,
       surfaceId: surface.surfaceId,
       state: "submitted",
+      route: { kind: "network", description: interaction.commandBoundary },
       receiptSchema: interaction.receiptSchema,
       receiptRecordRef: interaction.receiptRecordRef
         ? childRecordRef(interaction.receiptRecordRef, commandId)
@@ -91,7 +102,7 @@ export class EveCultMeshProviderClient {
     if (!submission?.receiptSchema || !submission?.receiptRecordRef) {
       throw new Error("The command submission has no advertised receipt location.");
     }
-    return this.#document(submission.receiptSchema, submission.receiptRecordRef, "receipt");
+    return normalizeCommandReceipt(await this.#document(submission.receiptSchema, submission.receiptRecordRef, "receipt"));
   }
 
   async #document(schemaId, recordRef, kind) {
@@ -154,8 +165,49 @@ export function normalizeSurfaceDocument(value) {
     title: stringField(value, "title", portable ? 4 : 2),
     version: numberField(value, "version", portable ? 5 : 3),
     updatedAtUtc: stringField(value, "updatedAtUtc", portable ? 6 : 4),
-    surface: { id, root: field(surface, "root", 1), styles: arrayField(surface, "styles", 2) },
-    commands: arrayField(value, "commands", portable ? 8 : 6),
+    surface: {
+      id,
+      root: normalizeComponent(field(surface, "root", 1), `${id}.root`),
+      styles: arrayField(surface, "styles", 2).map(token => ({ name: stringField(token, "name", 0), value: stringField(token, "value", 1) })),
+    },
+    commands: arrayField(value, "commands", portable ? 8 : 6).map(normalizeCommandDescriptor).filter(command => command.command),
+  };
+}
+
+export function normalizeCommandReceipt(value) {
+  return {
+    schema: stringField(value, "schema", 0), receiptId: stringField(value, "receiptId", 1),
+    commandId: stringField(value, "commandId", 2), command: stringField(value, "command", 3),
+    state: stringField(value, "state", 4), ownerRepo: stringField(value, "ownerRepo", 5),
+    authority: stringField(value, "authority", 6), providerId: stringField(value, "providerId", 7),
+    surfaceId: stringField(value, "surfaceId", 8), message: stringField(value, "message", 9),
+    issuedAtUtc: stringField(value, "issuedAtUtc", 10), sourceVersion: numberField(value, "sourceVersion", 11),
+  };
+}
+
+function normalizeComponent(value, fallbackId) {
+  return {
+    id: stringField(value, "id", 0) || fallbackId,
+    kind: stringField(value, "kind", 1) || "surface",
+    props: recordField(value, "props", 2),
+    children: arrayField(value, "children", 3).map((child, index) => normalizeComponent(child, `${fallbackId}.${index}`)),
+    stateBindings: arrayField(value, "stateBindings", 4),
+    embeddedDocuments: arrayField(value, "embeddedDocuments", 5).map(slot => ({
+      slotId: stringField(slot, "slotId", 0), documentId: stringField(slot, "documentId", 1),
+      schemaId: stringField(slot, "schemaId", 2), presentationKind: stringField(slot, "presentationKind", 3),
+    })),
+    layout: recordField(value, "layout", 6),
+    style: recordField(value, "style", 7),
+  };
+}
+
+function normalizeCommandDescriptor(value) {
+  const operation = field(value, "operation", 0);
+  const routeHint = field(operation, "routeHint", 3);
+  return {
+    command: stringField(operation, "operationId", 0),
+    label: stringField(operation, "label", 1),
+    transport: stringField(routeHint, "description", 1) || "cultmesh",
   };
 }
 
@@ -195,5 +247,7 @@ function field(value, name, slot) { return value && typeof value === "object" ? 
 function stringField(value, name, slot) { const result = field(value, name, slot); return typeof result === "string" ? result : ""; }
 function numberField(value, name, slot) { const result = field(value, name, slot); return typeof result === "number" && Number.isFinite(result) ? result : 0; }
 function arrayField(value, name, slot) { const result = field(value, name, slot); return Array.isArray(result) ? result : []; }
+function recordField(value, name, slot) { const result = field(value, name, slot); return result && typeof result === "object" && !Array.isArray(result) ? result : {}; }
 function objectValue(value) { return value && typeof value === "object" && !Array.isArray(value) ? value : {}; }
+function stringRecord(value) { return Object.fromEntries(Object.entries(objectValue(value)).map(([key, entry]) => [key, entry == null ? "" : String(entry)])); }
 function requireFunctionSet(value, names, label) { if (!value) throw new Error(`${label} is required.`); for (const name of names) if (typeof value[name] !== "function") throw new Error(`${label}.${name} is required.`); return value; }
