@@ -12,4 +12,10 @@ does not import provider state or plugin semantic implementations.
 npm install
 npm test
 npm run pack:check
+npm run capture:conformance
 ```
+
+The capture runner uses a consumer-supplied Electron executable and emits
+native offscreen-painted PNGs plus `gamecult.eve.runtime_witness.v1` documents
+for the generic world fixture and Aetheria. Provider state remains input data;
+the runtime owns the window, projection, pixels, and evidence.

@@ -13,10 +13,11 @@
     },
     "./preload": "./src/eve-provider-preload.cjs"
   },
-  "files": ["src", "eve-runtime-capability.json", "README.md", "LICENSE"],
+  "files": ["src", "capture", "scripts", "eve-runtime-capability.json", "README.md", "LICENSE"],
   "scripts": {
     "test": "node --test test/*.test.mjs",
-    "pack:check": "npm pack --dry-run"
+    "pack:check": "npm pack --dry-run",
+    "capture:conformance": "powershell -ExecutionPolicy Bypass -File scripts/capture-conformance.ps1"
   },
   "peerDependencies": {
     "electron": ">=30"

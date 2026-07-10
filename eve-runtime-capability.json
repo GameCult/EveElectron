@@ -99,33 +99,57 @@
     },
     "capture": {
       "ownerRepo": "EveElectron",
-      "status": "pending-owner-window-capture",
+      "status": "owner-window-captures",
       "captureContract": {
         "ownerRepo": "EveElectron",
         "runtimeId": "electron-shell",
         "targetId": "electron-shell",
         "requestSchema": "gamecult.eve.runtime_capture_request.v1",
-        "requestBuilder": "pending",
+        "requestBuilder": "scripts/capture-conformance.ps1",
         "advertisementPath": "provider-supplied",
         "captureKind": "electron-window-png",
         "artifactKind": "png",
         "artifactPattern": "artifacts/capture/{providerId}/{surfaceId}.png",
         "conformanceAttachment": "runtime.captureArtifacts[]",
         "requiredProvider": "aetheria",
-        "requiredSurface": "aetheria.game",
+        "requiredSurface": "aetheria.daemon.game",
         "additionalProviderSurfaces": [
           { "providerId": "eve.world-smoke", "surfaceId": "eve.world-smoke.surface", "purpose": "Non-product control." }
         ],
         "authority": "Capture observes Electron projection only; provider state and receipts remain provider-owned.",
         "publishProof": "Owner-repo Electron PNGs attach to Eve conformance."
       },
-      "evidencePaths": [],
-      "pendingProofs": ["Capture one non-product and one Aetheria window from the owner runtime."]
+      "evidencePaths": [
+        "../EveElectron/scripts/capture-conformance.ps1",
+        "../EveElectron/capture/main.mjs",
+        "../EveElectron/artifacts/capture/generic-world/window.png",
+        "../EveElectron/artifacts/capture/aetheria-world/window.png"
+      ],
+      "pendingProofs": []
     }
   },
   "capture": {
-    "status": "pending-owner-window-capture",
-    "note": "Aetheria live lowering passes through the owner package; portable owner-repo PNG capture remains pending.",
-    "artifacts": []
+    "status": "owner-window-png",
+    "note": "EveElectron produces native offscreen-painted window PNGs and runtime witnesses for a generic provider and Aetheria.",
+    "artifacts": [
+      {
+        "kind": "png",
+        "schema": "image/png",
+        "path": "../EveElectron/artifacts/capture/generic-world/window.png",
+        "providerId": "eve.world-smoke",
+        "surfaceId": "eve.world-smoke.surface",
+        "sourceSurfacePath": "../Eve/web/fixtures/eve-world-smoke-surface.json",
+        "requestPath": "../EveElectron/artifacts/capture/generic-world/runtime-witness.json"
+      },
+      {
+        "kind": "png",
+        "schema": "image/png",
+        "path": "../EveElectron/artifacts/capture/aetheria-world/window.png",
+        "providerId": "aetheria",
+        "surfaceId": "aetheria.daemon.game",
+        "sourceSurfacePath": "../Eve/web/fixtures/aetheria-world-surface.json",
+        "requestPath": "../EveElectron/artifacts/capture/aetheria-world/runtime-witness.json"
+      }
+    ]
   }
 }

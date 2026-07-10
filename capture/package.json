@@ -1,0 +1,6 @@
+{
+  "name": "eve-electron-capture-host",
+  "private": true,
+  "type": "module",
+  "main": "main.mjs"
+}
