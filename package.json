@@ -19,6 +19,9 @@
     "pack:check": "npm pack --dry-run",
     "capture:conformance": "powershell -ExecutionPolicy Bypass -File scripts/capture-conformance.ps1"
   },
+  "devDependencies": {
+    "electron": "^42.4.1"
+  },
   "peerDependencies": {
     "electron": ">=30"
   },

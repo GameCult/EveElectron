@@ -1,11 +1,13 @@
 param(
   [string] $EveRoot = "E:\Projects\Eve",
-  [string] $ElectronPath = "E:\Projects\Aetheria\Aetheria.Rts.Web\node_modules\electron\dist\electron.exe",
+  [string] $AetheriaRoot = "E:\Projects\Aetheria",
+  [string] $ElectronPath = "node_modules\electron\dist\electron.exe",
   [string] $OutputRoot = "artifacts\capture"
 )
 
 $ErrorActionPreference = "Stop"
 $repoRoot = Split-Path -Parent $PSScriptRoot
+$ElectronPath = if ([IO.Path]::IsPathRooted($ElectronPath)) { $ElectronPath } else { Join-Path $repoRoot $ElectronPath }
 $output = if ([IO.Path]::IsPathRooted($OutputRoot)) { $OutputRoot } else { Join-Path $repoRoot $OutputRoot }
 $captureApp = Join-Path $repoRoot "capture"
 if (-not (Test-Path -LiteralPath $ElectronPath)) { throw "Electron executable not found: $ElectronPath" }
@@ -19,8 +21,8 @@ $cases = @(
   },
   @{
     id = "aetheria-world"
-    advertisement = Join-Path $EveRoot "web\fixtures\aetheria.provider-advertisement.json"
-    surface = Join-Path $EveRoot "web\fixtures\aetheria-world-surface.json"
+    advertisement = Join-Path $AetheriaRoot "conformance\eve\aetheria.provider-advertisement.json"
+    surface = Join-Path $AetheriaRoot "conformance\eve\aetheria-world-surface.json"
     surfaceId = "aetheria.daemon.game"
   }
 )

@@ -15,7 +15,8 @@ npm run pack:check
 npm run capture:conformance
 ```
 
-The capture runner uses a consumer-supplied Electron executable and emits
-native offscreen-painted PNGs plus `gamecult.eve.runtime_witness.v1` documents
-for the generic world fixture and Aetheria. Provider state remains input data;
-the runtime owns the window, projection, pixels, and evidence.
+The capture runner uses EveElectron's development Electron dependency and emits
+native offscreen-painted PNGs plus `gamecult.eve.runtime_witness.v1` documents.
+The generic control comes from Eve; the Aetheria case comes from Aetheria's
+provider-owned conformance pack. Provider state remains input data; the runtime
+owns the window, projection, pixels, and evidence.
