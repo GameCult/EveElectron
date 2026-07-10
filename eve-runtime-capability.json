@@ -3,6 +3,12 @@
   "runtimeId": "electron-shell",
   "title": "Electron shell",
   "owner": "EveElectron",
+  "incubation": {
+    "ownerRepo": "EveElectron",
+    "currentHostRepo": "EveElectron",
+    "splitTarget": "EveElectron",
+    "graduationTrigger": "Graduated: the runtime body and package are owned here."
+  },
   "supportedFeatures": [
     "providerAdvertisements",
     "commandTransport",
@@ -70,7 +76,7 @@
         "artifactPattern": "gamecult-eve-electron-{version}.tgz",
         "publishProof": "npm pack is produced from the EveElectron owner repository."
       },
-      "evidencePaths": ["package.json", "package-lock.json", "src/index.mjs", "src/index.d.ts"],
+      "evidencePaths": ["../EveElectron/package.json", "../EveElectron/package-lock.json", "../EveElectron/src/index.mjs", "../EveElectron/src/index.d.ts"],
       "pendingProofs": []
     },
     "test": {
@@ -88,7 +94,7 @@
         "logArtifact": "Aetheria.Rts.Web Stage 7C log",
         "manifestMutation": "Aetheria consumes the package through a file dependency; provider state remains Aetheria-owned."
       },
-      "evidencePaths": ["test/shell.test.mjs", "test/window-host.test.mjs", "test/preload.test.cjs"],
+      "evidencePaths": ["../EveElectron/test/shell.test.mjs", "../EveElectron/test/window-host.test.mjs", "../EveElectron/test/preload.test.cjs"],
       "pendingProofs": []
     },
     "capture": {
