@@ -16,7 +16,7 @@ function harness() {
   const sent = [];
   const connections = [];
   const encoded = [];
-  const records = new Map([["records/provider", advertisement], ["records/world", surface], ["records/receipts:cmd-1", ["gamecult.eve.command_receipt.v1", "receipt-1", "cmd-1", "move", "accepted", "Provider", "daemon", "test-provider", "world", "moved", "now", 4]]]);
+  const records = new Map([["records/provider", advertisement], ["records/world", surface], ["records/objects", { entities: [1] }], ["records/receipts:cmd-1", ["gamecult.eve.command_receipt.v1", "receipt-1", "cmd-1", "move", "accepted", "Provider", "daemon", "test-provider", "world", "moved", "now", 4]]]);
   const peer = { send: message => sent.push(message), close() {}, on() {} };
   const mesh = {
     createPeerCatalog: () => ({ upsert() {} }), createAuthorityLeaseCatalog: () => ({ upsert() {} }),
@@ -57,6 +57,13 @@ test("submits at the advertised command boundary and reads the advertised receip
     schema: "gamecult.eve.command_receipt.v1", receiptId: "receipt-1", commandId: "cmd-1", command: "move",
     state: "accepted", ownerRepo: "Provider", authority: "daemon", providerId: "test-provider", surfaceId: "world",
     message: "moved", issuedAtUtc: "now", sourceVersion: 4,
+  });
+});
+
+test("resolves embedded documents without provider-specific slot logic", async () => {
+  const { client } = harness();
+  assert.deepEqual(await client.resolveDocument({ documentId: "records/objects", schemaId: "test.objects.v1" }), {
+    documentId: "records/objects", schemaId: "test.objects.v1", document: { entities: [1] },
   });
 });
 

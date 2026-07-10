@@ -50,6 +50,13 @@ export class EveCultMeshProviderClient {
     return this.#document(schemaId, recordRef, "embedded-document");
   }
 
+  async resolveDocument(request) {
+    const documentId = String(request?.documentId || request?.recordRef || "").trim();
+    const schemaId = String(request?.schemaId || "").trim();
+    if (!documentId || !schemaId) throw new Error("Embedded documents require documentId and schemaId.");
+    return { documentId, schemaId, document: await this.document({ schemaId, recordRef: documentId }) };
+  }
+
   async submitCommand(request) {
     const advertisement = await this.providerAdvertisement();
     const surface = selectSurface(advertisement, request?.surfaceId);
