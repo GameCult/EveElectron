@@ -54,7 +54,11 @@ export class EveCultMeshProviderClient {
     const documentId = String(request?.documentId || request?.recordRef || "").trim();
     const schemaId = String(request?.schemaId || "").trim();
     if (!documentId || !schemaId) throw new Error("Embedded documents require documentId and schemaId.");
-    return { documentId, schemaId, document: await this.document({ schemaId, recordRef: documentId }) };
+    const document = await this.document({ schemaId, recordRef: documentId });
+    if (schemaId === "gamecult.eve.surface.v1") {
+      return { documentId, schemaId, surface: normalizeSurfaceDocument(document).surface };
+    }
+    return { documentId, schemaId, document };
   }
 
   async submitCommand(request) {

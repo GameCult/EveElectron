@@ -15,7 +15,12 @@
       "types": "./src/cultmesh-provider-client.d.ts",
       "import": "./src/cultmesh-provider-client.mjs"
     },
-    "./preload": "./src/eve-provider-preload.cjs"
+    "./renderer": {
+      "types": "./src/eve-electron-renderer.d.mts",
+      "import": "./src/eve-electron-renderer.mjs"
+    },
+    "./preload": "./src/eve-provider-preload.cjs",
+    "./preload-entry": "./src/eve-provider-preload-entry.cjs"
   },
   "files": ["src", "capture", "scripts", "eve-runtime-capability.json", "README.md", "LICENSE"],
   "scripts": {

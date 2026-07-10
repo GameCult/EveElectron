@@ -1,6 +1,7 @@
 import type { BrowserWindow, BrowserWindowConstructorOptions, IpcMain, Shell } from "electron";
 
 export * from "./cultmesh-provider-client.js";
+export * from "./eve-electron-renderer.mjs";
 
 export interface EveElectronWindowOptions extends BrowserWindowConstructorOptions {
   browserWindow?: BrowserWindowConstructorOptions;

@@ -14,6 +14,11 @@ commands, receipts, and embedded documents. CultMesh and MessagePack are
 constructor dependencies supplied from the application's installed CultLib
 packages; the runtime owns protocol flow without pinning a sibling checkout.
 
+Electron hosts that use the standard Eve IPC channels can point their
+`BrowserWindow` preload directly at `src/eve-provider-preload-entry.cjs`. The
+entry exposes only `window.eveProvider`; provider-specific APIs do not share the
+renderer boundary.
+
 ```powershell
 npm install
 npm test

@@ -22,7 +22,7 @@ export declare class EveCultMeshProviderClient {
   providerAdvertisement(): Promise<Record<string, unknown>>;
   surface(surfaceId?: string): Promise<Record<string, unknown>>;
   document(request: { schemaId: string; recordRef: string }): Promise<unknown>;
-  resolveDocument(request: { documentId: string; schemaId: string }): Promise<{ documentId: string; schemaId: string; document: unknown }>;
+  resolveDocument(request: { documentId: string; schemaId: string }): Promise<{ documentId: string; schemaId: string; document?: unknown; surface?: Record<string, unknown> }>;
   submitCommand(request: Record<string, unknown>): Promise<EveCommandSubmission>;
   receipt(submission: Record<string, unknown>): Promise<unknown>;
 }

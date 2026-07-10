@@ -67,6 +67,11 @@ test("resolves embedded documents without provider-specific slot logic", async (
   });
 });
 
+test("resolves nested Eve surfaces as surface projections", async () => {
+  const { client } = harness();
+  assert.equal((await client.resolveDocument({ documentId: "records/world", schemaId: "gamecult.eve.surface.v1" })).surface.id, "world");
+});
+
 test("refuses unadvertised surfaces", async () => {
   const { client } = harness();
   await assert.rejects(() => client.surface("missing"), /does not advertise/);
