@@ -1,0 +1,40 @@
+{
+  "schema": "gamecult.eve.runtime_witness.v1",
+  "witnessId": "eveelectron.aetheria.aetheria.daemon.game",
+  "runtimeId": "electron-shell",
+  "runtimeOwnerRepo": "EveElectron",
+  "providerId": "aetheria",
+  "surfaceId": "aetheria.daemon.game",
+  "projectionKind": "provider-authored-world-surface",
+  "status": "pass",
+  "generatedAtUtc": "2026-07-10T15:09:51.213Z",
+  "execution": {
+    "cacheState": "cold",
+    "durationMs": 519.822,
+    "testDurationMs": 519.822
+  },
+  "assertions": {
+    "providerAdvertisement": true,
+    "surfaceMatched": true,
+    "nativeWindowCapture": true,
+    "nonblankPixels": true,
+    "sourceVersion": 1
+  },
+  "screenshotMetrics": {
+    "width": 1280,
+    "height": 800,
+    "encodedSizeBytes": 39559,
+    "sha256": "553809a7a784a4e12ba8d9316262ba1b8898fe5af20d232fe852637ef65af517"
+  },
+  "artifacts": [
+    {
+      "kind": "electron-window-png",
+      "path": "window.png",
+      "sha256": "553809a7a784a4e12ba8d9316262ba1b8898fe5af20d232fe852637ef65af517",
+      "sizeBytes": 39559,
+      "width": 1280,
+      "height": 800
+    }
+  ],
+  "authority": "eveelectron-owns-window-and-lowering-provider-owns-surface-state-and-command-acceptance"
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "gamecult.eve.runtime_witness.v1",
+  "witnessId": "eveelectron.eve.world-smoke.eve.world-smoke.surface",
+  "runtimeId": "electron-shell",
+  "runtimeOwnerRepo": "EveElectron",
+  "providerId": "eve.world-smoke",
+  "surfaceId": "eve.world-smoke.surface",
+  "projectionKind": "provider-authored-world-surface",
+  "status": "pass",
+  "generatedAtUtc": "2026-07-10T15:09:50.144Z",
+  "execution": {
+    "cacheState": "cold",
+    "durationMs": 491.992,
+    "testDurationMs": 491.992
+  },
+  "assertions": {
+    "providerAdvertisement": true,
+    "surfaceMatched": true,
+    "nativeWindowCapture": true,
+    "nonblankPixels": true,
+    "sourceVersion": 1
+  },
+  "screenshotMetrics": {
+    "width": 1280,
+    "height": 800,
+    "encodedSizeBytes": 28659,
+    "sha256": "5f16b4ffc1d63ce9d88e6dc64cb0afc31a325518ed9cc60bc4d670454da879ed"
+  },
+  "artifacts": [
+    {
+      "kind": "electron-window-png",
+      "path": "window.png",
+      "sha256": "5f16b4ffc1d63ce9d88e6dc64cb0afc31a325518ed9cc60bc4d670454da879ed",
+      "sizeBytes": 28659,
+      "width": 1280,
+      "height": 800
+    }
+  ],
+  "authority": "eveelectron-owns-window-and-lowering-provider-owns-surface-state-and-command-acceptance"
+}

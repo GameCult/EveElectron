@@ -129,8 +129,8 @@
       "evidencePaths": [
         "../EveElectron/scripts/capture-conformance.ps1",
         "../EveElectron/capture/main.mjs",
-        "../EveElectron/artifacts/capture/generic-world/window.png",
-        "../EveElectron/artifacts/capture/aetheria-world/window.png"
+        "../EveElectron/conformance/captures/generic-world/window.png",
+        "../EveElectron/conformance/captures/aetheria-world/window.png"
       ],
       "pendingProofs": []
     }
@@ -142,20 +142,20 @@
       {
         "kind": "png",
         "schema": "image/png",
-        "path": "../EveElectron/artifacts/capture/generic-world/window.png",
+        "path": "../EveElectron/conformance/captures/generic-world/window.png",
         "providerId": "eve.world-smoke",
         "surfaceId": "eve.world-smoke.surface",
         "sourceSurfacePath": "../Eve/web/fixtures/eve-world-smoke-surface.json",
-        "requestPath": "../EveElectron/artifacts/capture/generic-world/runtime-witness.json"
+        "requestPath": "../EveElectron/conformance/captures/generic-world/runtime-witness.json"
       },
       {
         "kind": "png",
         "schema": "image/png",
-        "path": "../EveElectron/artifacts/capture/aetheria-world/window.png",
+        "path": "../EveElectron/conformance/captures/aetheria-world/window.png",
         "providerId": "aetheria",
         "surfaceId": "aetheria.daemon.game",
         "sourceSurfacePath": "../Aetheria/conformance/eve/aetheria-world-surface.json",
-        "requestPath": "../EveElectron/artifacts/capture/aetheria-world/runtime-witness.json"
+        "requestPath": "../EveElectron/conformance/captures/aetheria-world/runtime-witness.json"
       }
     ]
   }
