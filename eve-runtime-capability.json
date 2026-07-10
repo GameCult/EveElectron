@@ -1,0 +1,125 @@
+{
+  "schema": "gamecult.eve.runtime_capability.v1",
+  "runtimeId": "electron-shell",
+  "title": "Electron shell",
+  "owner": "EveElectron",
+  "supportedFeatures": [
+    "providerAdvertisements",
+    "commandTransport",
+    "surfaceTreeProjection",
+    "embeddedDocuments",
+    "pluginProjection",
+    "securePreloadBridge",
+    "windowLifecycle"
+  ],
+  "supportedPlugins": [
+    {
+      "pluginId": "sai.vn",
+      "capabilities": ["vn.stage", "story.choose", "story.continue", "story.jump"],
+      "projectionAdapter": "EveElectronShell.buildPluginProjection"
+    },
+    {
+      "pluginId": "norn.graph",
+      "capabilities": ["embed.norn"],
+      "projectionAdapter": "EveElectronShell.buildPluginProjection"
+    },
+    {
+      "pluginId": "tex.math",
+      "capabilities": ["embed.tex", "tex.inline", "tex.block"],
+      "projectionAdapter": "EveElectronShell.buildPluginProjection"
+    }
+  ],
+  "unsupportedPlugins": [],
+  "worldSurfaceLowering": [
+    {
+      "targetId": "electron-shell",
+      "surfaceKinds": ["interactive-world", "interactive-world-editor"],
+      "projectionKinds": ["provider-authored-world-surface", "provider-authored-world-editor-surface"],
+      "supportLevel": "provider-shell-surface-tree-command-surface",
+      "ownership": "runtime-lowers-provider-world-surface-without-owning-world-state",
+      "evidencePaths": [
+        "src/eve-electron-shell.mjs",
+        "src/window-host.mjs",
+        "src/eve-provider-preload.cjs",
+        "test/shell.test.mjs",
+        "test/window-host.test.mjs",
+        "test/preload.test.cjs"
+      ]
+    }
+  ],
+  "commandTransport": {
+    "schema": "gamecult.eve.command_invocation.v1",
+    "status": "active",
+    "emitter": "EveElectronShell.createCommandIntent",
+    "clientId": "electron-shell",
+    "authority": "Electron emits command intents through provider-advertised boundaries; providers accept, deny, and publish receipts."
+  },
+  "lifecycle": {
+    "release": {
+      "ownerRepo": "EveElectron",
+      "status": "owner-npm-package",
+      "releaseContract": {
+        "ownerRepo": "EveElectron",
+        "packageName": "@gamecult/eve-electron",
+        "packageRoot": ".",
+        "versionSource": "package.json",
+        "tagPattern": "eveelectron-v{version}",
+        "artifactKind": "npm-package",
+        "requestSchema": "gamecult.eve.runtime_release_request.v1",
+        "requestBuilder": "npm pack",
+        "artifactPattern": "gamecult-eve-electron-{version}.tgz",
+        "publishProof": "npm pack is produced from the EveElectron owner repository."
+      },
+      "evidencePaths": ["package.json", "package-lock.json", "src/index.mjs", "src/index.d.ts"],
+      "pendingProofs": []
+    },
+    "test": {
+      "ownerRepo": "EveElectron",
+      "status": "owner-package-tests-and-aetheria-live-smoke",
+      "testContract": {
+        "ownerRepo": "EveElectron",
+        "runnerKind": "node-and-provider-live-smoke",
+        "runnerScript": "npm test",
+        "consumerProject": "E:\\Projects\\Aetheria",
+        "packageName": "@gamecult/eve-electron",
+        "testAssembly": "test/*.test.*",
+        "testPlatform": "Node contract tests plus Electron",
+        "resultsArtifact": "Aetheria.Rts.Web Stage 7C smoke result",
+        "logArtifact": "Aetheria.Rts.Web Stage 7C log",
+        "manifestMutation": "Aetheria consumes the package through a file dependency; provider state remains Aetheria-owned."
+      },
+      "evidencePaths": ["test/shell.test.mjs", "test/window-host.test.mjs", "test/preload.test.cjs"],
+      "pendingProofs": []
+    },
+    "capture": {
+      "ownerRepo": "EveElectron",
+      "status": "pending-owner-window-capture",
+      "captureContract": {
+        "ownerRepo": "EveElectron",
+        "runtimeId": "electron-shell",
+        "targetId": "electron-shell",
+        "requestSchema": "gamecult.eve.runtime_capture_request.v1",
+        "requestBuilder": "pending",
+        "advertisementPath": "provider-supplied",
+        "captureKind": "electron-window-png",
+        "artifactKind": "png",
+        "artifactPattern": "artifacts/capture/{providerId}/{surfaceId}.png",
+        "conformanceAttachment": "runtime.captureArtifacts[]",
+        "requiredProvider": "aetheria",
+        "requiredSurface": "aetheria.game",
+        "additionalProviderSurfaces": [
+          { "providerId": "eve.world-smoke", "surfaceId": "eve.world-smoke.surface", "purpose": "Non-product control." }
+        ],
+        "authority": "Capture observes Electron projection only; provider state and receipts remain provider-owned.",
+        "publishProof": "Owner-repo Electron PNGs attach to Eve conformance."
+      },
+      "evidencePaths": [],
+      "pendingProofs": ["Capture one non-product and one Aetheria window from the owner runtime."]
+    }
+  },
+  "capture": {
+    "status": "pending-owner-window-capture",
+    "note": "Aetheria live lowering passes through the owner package; portable owner-repo PNG capture remains pending.",
+    "artifacts": []
+  }
+}

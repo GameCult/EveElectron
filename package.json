@@ -1,0 +1,27 @@
+{
+  "name": "@gamecult/eve-electron",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Provider-agnostic Electron runtime for Eve surfaces.",
+  "license": "MPL-2.0",
+  "main": "src/index.mjs",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.mjs"
+    },
+    "./preload": "./src/eve-provider-preload.cjs"
+  },
+  "files": ["src", "eve-runtime-capability.json", "README.md", "LICENSE"],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "pack:check": "npm pack --dry-run"
+  },
+  "peerDependencies": {
+    "electron": ">=30"
+  },
+  "peerDependenciesMeta": {
+    "electron": { "optional": true }
+  }
+}
