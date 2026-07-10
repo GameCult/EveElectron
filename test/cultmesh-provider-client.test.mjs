@@ -16,7 +16,7 @@ function harness() {
   const sent = [];
   const connections = [];
   const encoded = [];
-  const records = new Map([["records/provider", advertisement], ["records/world", surface], ["records/objects", { entities: [1] }], ["records/receipts:cmd-1", ["gamecult.eve.command_receipt.v1", "receipt-1", "cmd-1", "move", "accepted", "Provider", "daemon", "test-provider", "world", "moved", "now", 4]]]);
+  const records = new Map([["records/provider", advertisement], ["records/world", surface], ["records/objects", { entities: [1] }], ["cultmesh://fixture/icon", Uint8Array.from([1, 2, 3])], ["records/receipts:cmd-1", ["gamecult.eve.command_receipt.v1", "receipt-1", "cmd-1", "move", "accepted", "Provider", "daemon", "test-provider", "world", "moved", "now", 4]]]);
   const peer = { send: message => sent.push(message), close() {}, on() {} };
   const mesh = {
     createPeerCatalog: () => ({ upsert() {} }), createAuthorityLeaseCatalog: () => ({ upsert() {} }),
@@ -70,6 +70,11 @@ test("resolves embedded documents without provider-specific slot logic", async (
 test("resolves nested Eve surfaces as surface projections", async () => {
   const { client } = harness();
   assert.equal((await client.resolveDocument({ documentId: "records/world", schemaId: "gamecult.eve.surface.v1" })).surface.id, "world");
+});
+
+test("reads provider assets without provider-specific transport code", async () => {
+  const { client } = harness();
+  assert.deepEqual(await client.asset("cultmesh://fixture/icon"), { bytes: Uint8Array.from([1, 2, 3]), mimeType: "image/png" });
 });
 
 test("refuses unadvertised surfaces", async () => {

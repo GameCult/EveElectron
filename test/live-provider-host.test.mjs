@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { eveProviderIpcChannels, registerEveProviderIpc } from "../src/live-provider-host.mjs";
+import { eveProviderIpcChannels, registerEveAssetProtocol, registerEveProviderIpc } from "../src/live-provider-host.mjs";
 
 test("registers one generic Eve IPC authority and removes it cleanly", async () => {
   const handlers = new Map();
@@ -24,4 +24,15 @@ test("registers one generic Eve IPC authority and removes it cleanly", async () 
   });
   remove();
   assert.equal(handlers.size, 0);
+});
+
+test("serves CultMesh assets through the runtime-owned protocol", async () => {
+  let handler;
+  registerEveAssetProtocol({ handle: (_scheme, value) => { handler = value; } }, {
+    asset: async uri => ({ bytes: Uint8Array.from([4, 5]), mimeType: uri.endsWith("icon") ? "image/png" : "application/octet-stream" }),
+  });
+  const response = await handler({ url: "eve-asset://asset?uri=cultmesh%3A%2F%2Ffixture%2Ficon" });
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("content-type"), "image/png");
+  assert.deepEqual(new Uint8Array(await response.arrayBuffer()), Uint8Array.from([4, 5]));
 });

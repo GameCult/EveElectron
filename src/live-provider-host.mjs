@@ -9,6 +9,7 @@ export const eveProviderIpcChannels = Object.freeze({
   submitCommand: "eve:submit-command",
   windowControl: "eve-electron:window-control",
 });
+export const defaultEveAssetProtocol = "eve-asset";
 
 export function registerEveProviderIpc(ipcMain, client, { receiptTimeoutMs = 5000 } = {}) {
   const handlers = [
@@ -28,7 +29,7 @@ export function registerEveProviderIpc(ipcMain, client, { receiptTimeoutMs = 500
 }
 
 export async function startEveElectronProviderHost(options) {
-  const { app, BrowserWindow, ipcMain, shell } = options.electron;
+  const { app, BrowserWindow, ipcMain, protocol, shell } = options.electron;
   await app.whenReady();
   const client = (options.createProviderClient || ((target, dependencies, clientOptions) =>
     new EveCultMeshProviderClient(target, dependencies, clientOptions)))(
@@ -42,12 +43,15 @@ export async function startEveElectronProviderHost(options) {
   }, { BrowserWindow, shell });
   const removeProviderIpc = registerEveProviderIpc(ipcMain, client, options.receipts);
   const removeWindowIpc = registerEveWindowControls(ipcMain, BrowserWindow, eveProviderIpcChannels.windowControl);
+  const assetProtocol = options.assetProtocol === false ? "" : options.assetProtocol || defaultEveAssetProtocol;
+  if (assetProtocol) registerEveAssetProtocol(protocol, client, assetProtocol);
   let closed = false;
   const close = async () => {
     if (closed) return;
     closed = true;
     removeProviderIpc();
     removeWindowIpc();
+    if (assetProtocol && typeof protocol.unhandle === "function") protocol.unhandle(assetProtocol);
     await client.close();
     if (!window.isDestroyed?.()) window.destroy();
   };
@@ -61,6 +65,22 @@ export async function startEveElectronProviderHost(options) {
     await close();
     throw error;
   }
+}
+
+export function registerEveAssetProtocol(protocol, client, scheme = defaultEveAssetProtocol) {
+  if (!protocol?.handle) throw new Error("Electron protocol.handle is required for Eve assets.");
+  protocol.handle(scheme, async request => {
+    try {
+      const uri = new URL(request.url).searchParams.get("uri") || "";
+      const asset = await client.asset(uri);
+      return new Response(Uint8Array.from(asset.bytes).buffer, {
+        status: 200,
+        headers: { "content-type": asset.mimeType, "cache-control": "no-store" },
+      });
+    } catch (error) {
+      return new Response(error instanceof Error ? error.message : String(error), { status: 404 });
+    }
+  });
 }
 
 async function waitForProvider(client, timeoutMs) {

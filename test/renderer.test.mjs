@@ -11,6 +11,7 @@ test("adapts only the generic Eve provider renderer boundary", async () => {
     submitCommand: async request => { calls.push(["command", request]); return { state: "accepted" }; },
   };
   const transport = createEveElectronRendererTransport(provider);
+  assert.equal(transport.resolveAssetUrl("cultmesh://fixture/icon"), "eve-asset://asset?uri=cultmesh%3A%2F%2Ffixture%2Ficon");
   await transport.surface({ surfaceId: "world", recordRef: "provider-owned" });
   await transport.resolveDocument({ documentId: "objects", schemaId: "objects.v1" });
   await transport.submitCommand({ providerId: "fixture", surfaceId: "world", command: "move", clientId: "renderer", issuedAt: "now", payload: { x: 1 } });

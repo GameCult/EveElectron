@@ -25,6 +25,11 @@ receipt reconciliation, provider readiness, renderer loading, and cleanup.
 Provider repos supply a resolved target, dependencies, renderer path, and any
 provider-owned daemon development or asset hooks.
 
+CultMesh-native asset references lower through the runtime-owned
+`eve-asset://` protocol. The generic provider client reads
+`gamecult.cultmesh.cdn.asset_blob.v1` records; provider repos publish bytes and
+retain asset truth without implementing an Electron protocol.
+
 ```powershell
 npm install
 npm test

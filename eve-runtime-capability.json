@@ -17,7 +17,8 @@
     "pluginProjection",
     "securePreloadBridge",
     "windowLifecycle",
-    "liveProviderHost"
+    "liveProviderHost",
+    "providerAssets"
   ],
   "supportedPlugins": [
     {

@@ -1,5 +1,6 @@
 const providerSchema = "gamecult.eve.provider_advertisement.v1";
 const commandSchema = "gamecult.eve.command_invocation.v1";
+const assetBlobSchema = "gamecult.cultmesh.cdn.asset_blob.v1";
 const connectionId = 0x43554c54;
 
 export class EveCultMeshProviderClient {
@@ -59,6 +60,15 @@ export class EveCultMeshProviderClient {
       return { documentId, schemaId, surface: normalizeSurfaceDocument(document).surface };
     }
     return { documentId, schemaId, document };
+  }
+
+  async asset(uri) {
+    const recordRef = String(uri || "").trim();
+    if (!recordRef.toLowerCase().startsWith("cultmesh://")) throw new Error(`Asset URI must be CultMesh-native: ${recordRef}`);
+    const value = await this.#document(assetBlobSchema, recordRef, "asset");
+    const bytes = value instanceof Uint8Array ? value : Array.isArray(value) ? Uint8Array.from(value) : null;
+    if (!bytes) throw new Error(`CultMesh asset ${recordRef} did not decode to bytes.`);
+    return { bytes, mimeType: mimeTypeFromUri(recordRef) };
   }
 
   async submitCommand(request) {
@@ -261,4 +271,12 @@ function arrayField(value, name, slot) { const result = field(value, name, slot)
 function recordField(value, name, slot) { const result = field(value, name, slot); return result && typeof result === "object" && !Array.isArray(result) ? result : {}; }
 function objectValue(value) { return value && typeof value === "object" && !Array.isArray(value) ? value : {}; }
 function stringRecord(value) { return Object.fromEntries(Object.entries(objectValue(value)).map(([key, entry]) => [key, entry == null ? "" : String(entry)])); }
+function mimeTypeFromUri(uri) {
+  const value = uri.toLowerCase();
+  if (value.endsWith(".jpg") || value.endsWith(".jpeg")) return "image/jpeg";
+  if (value.endsWith(".svg")) return "image/svg+xml";
+  if (value.endsWith(".webp")) return "image/webp";
+  if (value.endsWith(".json")) return "application/json";
+  return "image/png";
+}
 function requireFunctionSet(value, names, label) { if (!value) throw new Error(`${label} is required.`); for (const name of names) if (typeof value[name] !== "function") throw new Error(`${label}.${name} is required.`); return value; }

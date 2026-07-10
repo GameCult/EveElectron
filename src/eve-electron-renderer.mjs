@@ -12,8 +12,14 @@ export function createEveElectronRendererTransport(eveProvider, { resolveAssetUr
       payload: intent.payload,
     }),
     resolveDocument: request => eveProvider.document(request),
-    resolveAssetUrl,
+    resolveAssetUrl: resolveAssetUrl || defaultAssetUrl,
   };
+}
+
+function defaultAssetUrl(uri) {
+  return String(uri || "").startsWith("cultmesh://")
+    ? `eve-asset://asset?uri=${encodeURIComponent(uri)}`
+    : uri;
 }
 
 export async function mountEveElectronProvider({
